@@ -250,7 +250,7 @@ function DashboardLayout() {
 
                 <DashboardTopbar name={name} avatarUrl={avatarUrl} />
 
-                <main className="flex-1 p-4 md:p-8 min-h-0 overflow-y-auto overflow-x-hidden">
+                <main className="flex-1 p-4 md:p-8 min-h-0 overflow-y-auto overflow-x-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/[0.03] via-background to-background">
                   <AnimatedOutlet />
                 </main>
               </SidebarInset>

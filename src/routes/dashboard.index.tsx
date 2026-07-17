@@ -17,7 +17,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   Store,
-  TrendingUp,
   ArrowRight,
   Zap,
   Wallet,
@@ -49,7 +48,6 @@ import { Img } from "@/components/ui/Img";
 import { GamificationHub } from "@/components/dashboard/core-loop/GamificationHub";
 import { useServerFn } from "@tanstack/react-start";
 import { getGamification, type GamificationData } from "@/lib/core-loop";
-import { InlineEditable } from "@/components/ui/inline-editable";
 import {
   getZRExpressBalance,
   type ZRExpressBalanceResult,
@@ -95,6 +93,8 @@ function DashboardHome() {
     revenue: 0,
     customers: 0,
   });
+  const [sparklineOrders, setSparklineOrders] = useState<number[]>([]);
+  const [sparklineRevenue, setSparklineRevenue] = useState<number[]>([]);
   const [recentOrders, setRecentOrders] = useState<
     Array<{
       id: string;
@@ -173,7 +173,7 @@ function DashboardHome() {
     const scopedOrdersForAgg = () => {
       let q = supabase
         .from("orders")
-        .select("customer_email,total")
+        .select("customer_email,total,created_at")
         .eq("store_owner_id", user.id)
         .order("created_at", { ascending: false })
         .limit(5000);
@@ -205,6 +205,21 @@ function DashboardHome() {
           revenue,
           customers,
         });
+
+        const last7DaysOrders = Array.from({ length: 7 }, (_, i) => {
+          const day = new Date(Date.now() - (6 - i) * 86400000);
+          const dayStr = day.toISOString().slice(0, 10);
+          return agg.filter((o) => o.created_at?.slice(0, 10) === dayStr).length;
+        });
+        const last7DaysRevenue = Array.from({ length: 7 }, (_, i) => {
+          const day = new Date(Date.now() - (6 - i) * 86400000);
+          const dayStr = day.toISOString().slice(0, 10);
+          return agg
+            .filter((o) => o.created_at?.slice(0, 10) === dayStr)
+            .reduce((s, o) => s + Number(o.total ?? 0), 0);
+        });
+        setSparklineOrders(last7DaysOrders);
+        setSparklineRevenue(last7DaysRevenue);
 
         const recent = recentRes.data ?? [];
         const recentIds = recent.map((o) => o.id);
@@ -335,33 +350,39 @@ function DashboardHome() {
   const stats = useMemo(
     () => [
       {
-        label: t("dashboard.home.stats.products"),
-        raw: counts.products,
-        icon: Package,
-        gradient: "bg-gradient-to-br from-violet-500 to-fuchsia-500",
-      },
-      {
-        label: t("dashboard.home.stats.orders"),
-        raw: counts.orders,
-        icon: ShoppingBag,
-        gradient: "bg-gradient-to-br from-blue-500 to-indigo-500",
-      },
-      {
         label: t("dashboard.home.stats.revenue"),
         raw: counts.revenue,
         isRevenue: true,
         icon: DollarSign,
         gradient: "bg-gradient-to-br from-emerald-500 to-teal-500",
         currency,
+        sparklineData: sparklineRevenue,
+        colSpan: "lg:col-span-2",
+      },
+      {
+        label: t("dashboard.home.stats.orders"),
+        raw: counts.orders,
+        icon: ShoppingBag,
+        gradient: "bg-gradient-to-br from-blue-500 to-indigo-500",
+        sparklineData: sparklineOrders,
+        colSpan: "",
+      },
+      {
+        label: t("dashboard.home.stats.products"),
+        raw: counts.products,
+        icon: Package,
+        gradient: "bg-gradient-to-br from-violet-500 to-fuchsia-500",
+        colSpan: "",
       },
       {
         label: t("dashboard.home.stats.customers"),
         raw: counts.customers,
         icon: Users,
         gradient: "bg-gradient-to-br from-orange-400 to-amber-500",
+        colSpan: "",
       },
     ],
-    [t, counts.products, counts.orders, counts.revenue, counts.customers, currency],
+    [t, counts.products, counts.orders, counts.revenue, counts.customers, currency, sparklineOrders, sparklineRevenue],
   );
 
   const displayName = name || user?.email?.split("@")[0] || "—";
@@ -409,52 +430,41 @@ function DashboardHome() {
   }, [storeSettings, counts.products, hasPendingPayment, t]);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-5 pb-8">
       {/* Welcome header */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-background via-background to-primary/5 p-6 sm:p-8"
+        className="relative overflow-hidden rounded-2xl border border-border/40 bg-card p-6 sm:p-8"
       >
-        <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-violet-500/5 blur-3xl pointer-events-none" />
-        <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div
+          className="absolute inset-y-0 right-0 w-1/3 opacity-[0.03] dark:opacity-[0.06]"
+          style={{ backgroundImage: "radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)", backgroundSize: "20px 20px" }}
+        />
+        <div className="absolute left-0 inset-y-0 w-1 rounded-l-2xl bg-gradient-to-b from-violet-500 via-fuchsia-500 to-violet-500" />
+        <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pl-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-primary">
-              <TrendingUp className="h-3 w-3" />
-              {t("dashboard.home.kicker")}
-            </div>
-            <h1 className="mt-3 text-3xl md:text-4xl font-bold font-display tracking-tight">
-              {t("dashboard.home.welcome")}{" "}
-              <InlineEditable
-                value={displayName}
-                onSave={async (val) => {
-                  if (!user) return;
-                  const { error } = await supabase.from("profiles").update({ name: val }).eq("id", user.id);
-                  if (!error) setName(val);
-                }}
-                placeholder="Your name"
-                className="text-primary font-bold"
-                inputClassName="text-3xl md:text-4xl font-bold font-display bg-transparent"
-                maxLength={60}
-              />
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-1">
+              {new Date().getHours() < 12 ? "☀️ Good morning" : new Date().getHours() < 18 ? "🌤️ Good afternoon" : "🌙 Good evening"}
+            </p>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+              {displayName} <span className="text-muted-foreground font-normal text-xl">👋</span>
             </h1>
-            <p className="mt-1.5 text-muted-foreground/80 text-sm">
+            <p className="text-sm text-muted-foreground mt-1">
               {t("dashboard.home.subtitle")}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <Badge
-              variant="outline"
-              className="gap-1.5 border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 shadow-sm"
-            >
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <div className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="relative h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              {t("dashboard.home.storeActive")}
-            </Badge>
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                {t("dashboard.home.storeActive")}
+              </span>
+            </div>
           </div>
         </div>
       </motion.div>
@@ -494,6 +504,7 @@ function DashboardHome() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.06 * i }}
+              className={s.colSpan}
             >
               <StatCard
                 label={s.label}
@@ -503,6 +514,7 @@ function DashboardHome() {
                 gradient={s.gradient}
                 delay={i * 120}
                 currency={s.currency}
+                sparklineData={s.sparklineData}
               />
             </motion.div>
           ))}
@@ -519,11 +531,16 @@ function DashboardHome() {
           transition={{ duration: 0.4, delay: 0.18 }}
           className={
             zrBalance.ok
-              ? "rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-teal-500/10 p-5 sm:p-6"
-              : "rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-orange-500/10 p-5 sm:p-6"
+              ? "relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-teal-500/10 p-5 sm:p-6"
+              : "relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-orange-500/10 p-5 sm:p-6"
           }
         >
-          <div className="flex items-center justify-between gap-4 flex-wrap">
+          {zrBalance.ok && zrBalance.readyBalance > 0 && (
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[80px] sm:text-[120px] font-bold text-emerald-500/[0.05] dark:text-emerald-400/[0.08] leading-none pointer-events-none select-none tabular-nums">
+              {zrBalance.readyBalance.toLocaleString()}
+            </div>
+          )}
+          <div className="relative flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3 min-w-0">
               <div
                 className={
@@ -573,8 +590,21 @@ function DashboardHome() {
               )}
             </div>
           </div>
+          {zrBalance.ok && zrBalance.readyBalance > 0 && (
+            <div className="relative mt-3 flex items-center justify-between">
+              <span className="text-xs text-emerald-600/80 font-medium">Ready to withdraw</span>
+              <Button variant="outline" size="sm" asChild className="h-7 text-xs border-emerald-500/20 hover:bg-emerald-500/10">
+                <Link to="/dashboard/shipments">
+                  Withdraw <ArrowRight className="h-3 w-3 ml-1" />
+                </Link>
+              </Button>
+            </div>
+          )}
           {!zrBalance.ok && (
-            <div className="mt-3 text-xs text-amber-700/90 break-words">{zrBalance.message}</div>
+            <div className="relative mt-3 text-xs text-amber-700/90 break-words">{zrBalance.message}</div>
+          )}
+          {zrBalance.ok && zrBalance.readyBalance === 0 && (
+            <div className="relative mt-3 text-xs text-muted-foreground">No parcels have been delivered yet this period</div>
           )}
         </motion.div>
       )}
@@ -603,26 +633,23 @@ function DashboardHome() {
                   <div className="h-8 w-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
                     <Zap className="h-4 w-4 text-violet-600 dark:text-violet-400" />
                   </div>
-                  <h3 className="font-semibold text-sm">{t("dashboard.home.shortcuts.title")}</h3>
+                  <h3 className="text-sm font-semibold text-foreground">{t("dashboard.home.shortcuts.title")}</h3>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                   {[
-                    { to: "/dashboard/products", icon: Plus, gradient: "from-violet-500 to-fuchsia-500", label: t("dashboard.home.shortcuts.products"), desc: t("dashboard.home.shortcuts.productsDesc") },
-                    { to: "/dashboard/orders", icon: ShoppingBag, gradient: "from-blue-500 to-indigo-500", label: t("dashboard.home.shortcuts.orders"), desc: t("dashboard.home.shortcuts.ordersDesc") },
-                    { to: "/dashboard/customers", icon: Users, gradient: "from-emerald-500 to-teal-500", label: t("dashboard.home.shortcuts.customers"), desc: t("dashboard.home.shortcuts.customersDesc") },
-                    { to: "/dashboard/analytics", icon: BarChart3, gradient: "from-sky-500 to-blue-600", label: t("dashboard.home.shortcuts.analytics"), desc: t("dashboard.home.shortcuts.analyticsDesc") },
-                    { to: "/dashboard/delivery", icon: Truck, gradient: "from-amber-500 to-orange-500", label: t("dashboard.home.shortcuts.delivery"), desc: t("dashboard.home.shortcuts.deliveryDesc") },
-                    { to: "/dashboard/voice-generator", icon: Mic, gradient: "from-rose-500 to-pink-500", label: t("dashboard.home.shortcuts.voiceGenerator"), desc: t("dashboard.home.shortcuts.voiceGeneratorDesc") },
+                    { to: "/dashboard/products", icon: Plus, gradient: "from-violet-500 to-fuchsia-500", label: t("dashboard.home.shortcuts.products") },
+                    { to: "/dashboard/orders", icon: ShoppingBag, gradient: "from-blue-500 to-indigo-500", label: t("dashboard.home.shortcuts.orders") },
+                    { to: "/dashboard/customers", icon: Users, gradient: "from-emerald-500 to-teal-500", label: t("dashboard.home.shortcuts.customers") },
+                    { to: "/dashboard/analytics", icon: BarChart3, gradient: "from-sky-500 to-blue-600", label: t("dashboard.home.shortcuts.analytics") },
+                    { to: "/dashboard/delivery", icon: Truck, gradient: "from-amber-500 to-orange-500", label: t("dashboard.home.shortcuts.delivery") },
+                    { to: "/dashboard/voice-generator", icon: Mic, gradient: "from-rose-500 to-pink-500", label: t("dashboard.home.shortcuts.voiceGenerator") },
                   ].map((s) => (
-                    <Link key={s.to} to={s.to as never} className="block group">
-                      <div className="flex items-center gap-3 p-3 rounded-xl border border-border/50 hover:bg-muted/50 transition-colors">
-                        <div className={`h-9 w-9 rounded-lg bg-gradient-to-br ${s.gradient} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-                          <s.icon className="h-4 w-4 text-white" />
+                    <Link key={s.to} to={s.to as never} className="group block">
+                      <div className="flex flex-col items-center gap-2.5 p-4 rounded-2xl border border-border/40 bg-card hover:border-primary/30 hover:bg-primary/5 transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] text-center">
+                        <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${s.gradient} flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-300`}>
+                          <s.icon className="h-5 w-5 text-white" />
                         </div>
-                        <div className="min-w-0">
-                          <div className="font-semibold text-xs truncate">{s.label}</div>
-                          <div className="text-[11px] text-muted-foreground/70 truncate">{s.desc}</div>
-                        </div>
+                        <span className="text-xs font-semibold text-foreground">{s.label}</span>
                       </div>
                     </Link>
                   ))}
@@ -727,7 +754,7 @@ function DashboardHome() {
                 <div className="h-8 w-8 rounded-lg bg-violet-500/10 flex items-center justify-center">
                   <ShoppingBag className="h-4 w-4 text-violet-600 dark:text-violet-400" />
                 </div>
-                <h3 className="font-semibold">{t("dashboard.home.recentOrders")}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{t("dashboard.home.recentOrders")}</h3>
               </div>
               <Button variant="outline" size="sm" asChild className="gap-1.5 text-xs">
                 <Link to="/dashboard/orders">
@@ -751,19 +778,19 @@ function DashboardHome() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/40 pb-3">
-                      <th className="text-left text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 pr-4">
+                      <th className="text-left text-xs font-semibold uppercase text-muted-foreground pb-3 pr-4" style={{ letterSpacing: "0.08em" }}>
                         {t("dashboard.home.tableHeaders.order")}
                       </th>
-                      <th className="text-left text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 pr-4">
+                      <th className="text-left text-xs font-semibold uppercase text-muted-foreground pb-3 pr-4 hidden sm:table-cell" style={{ letterSpacing: "0.08em" }}>
                         {t("dashboard.home.tableHeaders.customer")}
                       </th>
-                      <th className="text-left text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 pr-4">
+                      <th className="text-left text-xs font-semibold uppercase text-muted-foreground pb-3 pr-4 hidden md:table-cell" style={{ letterSpacing: "0.08em" }}>
                         {t("dashboard.home.tableHeaders.date")}
                       </th>
-                      <th className="text-left text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3 pr-4">
+                      <th className="text-left text-xs font-semibold uppercase text-muted-foreground pb-3 pr-4" style={{ letterSpacing: "0.08em" }}>
                         {t("dashboard.home.tableHeaders.status")}
                       </th>
-                      <th className="text-right text-xs font-medium uppercase tracking-wide text-muted-foreground pb-3">
+                      <th className="text-right text-xs font-semibold uppercase text-muted-foreground pb-3" style={{ letterSpacing: "0.08em" }}>
                         {t("dashboard.home.tableHeaders.amount")}
                       </th>
                     </tr>
@@ -774,7 +801,7 @@ function DashboardHome() {
                       return (
                         <tr
                           key={o.id}
-                          className="border-b border-border/40 last:border-0 hover:bg-muted/30 transition-colors cursor-pointer"
+                          className="border-b border-border/40 last:border-0 hover:bg-primary/3 transition-colors cursor-pointer"
                         >
                           <td className="py-4 pr-4">
                             <Link to="/dashboard/orders" className="flex items-center gap-3 min-w-0">
@@ -782,12 +809,12 @@ function DashboardHome() {
                                 <Img
                                   src={o.product_image}
                                   alt={o.product_name ?? ""}
-                                  width={88}
+                                  width={96}
                                   quality={75}
-                                  className="h-10 w-10 rounded-lg shrink-0 ring-1 ring-border/30"
+                                  className="h-12 w-12 rounded-lg shrink-0 ring-1 ring-border/30 object-cover"
                                 />
                               ) : (
-                                <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 flex items-center justify-center shrink-0 ring-1 ring-border/30">
+                                <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 flex items-center justify-center shrink-0 ring-1 ring-border/30">
                                   <ShoppingBag className="h-4 w-4 text-violet-500" />
                                 </div>
                               )}
@@ -795,14 +822,16 @@ function DashboardHome() {
                                 <p className="font-semibold text-sm truncate">
                                   {o.product_name ?? t("dashboard.home.unknownOrder")}
                                 </p>
-                                <p className="text-xs text-muted-foreground truncate">
+                                <p className="text-[11px] text-muted-foreground font-mono truncate">
+                                  #{o.id.slice(0, 8)}
+                                </p>
+                                <p className="text-xs text-muted-foreground truncate sm:hidden">
                                   {o.customer_name}
-                                  {o.item_count > 1 && ` · +${o.item_count - 1}`}
                                 </p>
                               </div>
                             </Link>
                           </td>
-                          <td className="py-4 pr-4">
+                          <td className="py-4 pr-4 hidden sm:table-cell">
                             <div className="flex items-center gap-1.5 min-w-0">
                               <User className="h-4 w-4 text-muted-foreground shrink-0" />
                               <span className="text-sm truncate">
@@ -810,7 +839,7 @@ function DashboardHome() {
                               </span>
                             </div>
                           </td>
-                          <td className="py-4 pr-4 whitespace-nowrap">
+                          <td className="py-4 pr-4 whitespace-nowrap hidden md:table-cell">
                             <div>
                               <p className="text-sm">{format(createdDate, "M/d/yyyy")}</p>
                               <p className="text-xs text-muted-foreground">{format(createdDate, "h:mm a")}</p>
@@ -826,12 +855,9 @@ function DashboardHome() {
                             </Badge>
                           </td>
                           <td className="py-4 text-right">
-                            <div className="flex items-center justify-end gap-2">
-                              <span className="font-semibold text-sm tabular-nums text-foreground">
-                                {Number(o.total).toLocaleString()} {currency}
-                              </span>
-                              <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
-                            </div>
+                            <span className={`font-semibold text-sm tabular-nums ${o.status === "delivered" ? "text-emerald-600 dark:text-emerald-400" : "text-foreground"}`}>
+                              {Number(o.total).toLocaleString()} {currency}
+                            </span>
                           </td>
                         </tr>
                       );
@@ -918,6 +944,7 @@ function StatCard({
   gradient,
   delay,
   currency = "DZD",
+  sparklineData,
 }: {
   label: string;
   rawValue: number;
@@ -926,6 +953,7 @@ function StatCard({
   gradient?: string;
   delay: number;
   currency?: string;
+  sparklineData?: number[];
 }) {
   const animated = useCountUp(rawValue, 1400, delay);
   const display = isRevenue
@@ -933,6 +961,18 @@ function StatCard({
     : animated.toLocaleString();
 
   const isFilled = !!gradient;
+
+  const sparkPoints = useMemo(() => {
+    if (!sparklineData || sparklineData.length < 2) return "";
+    const max = Math.max(...sparklineData, 1);
+    return sparklineData
+      .map((v, i) => {
+        const x = (i / (sparklineData.length - 1)) * 100;
+        const y = 100 - (v / max) * 100;
+        return `${x},${y}`;
+      })
+      .join(" ");
+  }, [sparklineData]);
 
   return (
     <Card
@@ -963,7 +1003,7 @@ function StatCard({
             className={
               isFilled
                 ? "h-9 w-9 rounded-xl bg-white/20 backdrop-blur-sm text-white flex items-center justify-center"
-                : "h-9 w-9 rounded-xl bg-muted/50 text-muted-foreground flex items-center justify-center"
+                : "h-9 w-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center"
             }
           >
             <Icon className="h-4 w-4" />
@@ -973,13 +1013,26 @@ function StatCard({
           <div
             className={
               isFilled
-                ? "text-2xl sm:text-3xl font-bold font-display tabular-nums tracking-tight text-white"
-                : "text-2xl sm:text-3xl font-bold font-display tabular-nums tracking-tight"
+                ? "text-2xl sm:text-3xl font-bold font-display tracking-tighter text-white"
+                : "text-2xl sm:text-3xl font-bold font-display tracking-tighter"
             }
+            style={{ fontFeatureSettings: '"tnum"' }}
           >
             {display}
           </div>
         </div>
+        {sparkPoints && (
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-8 w-full mt-3">
+            <polyline
+              points={sparkPoints}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className={isFilled ? "text-white/50" : "text-primary"}
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
+        )}
       </CardContent>
     </Card>
   );
