@@ -69,6 +69,7 @@ export function Navbar() {
     { label: t("nav.pricing"), href: "#pricing" },
     { label: t("nav.testimonials"), href: "#testimonials" },
     { label: t("nav.themes"), href: "/themes", isRoute: true },
+    { label: t("nav.tools"), href: "/tools/qr-code", isRoute: true },
   ];
 
   return (

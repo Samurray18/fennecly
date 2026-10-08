@@ -24,6 +24,7 @@ import { Route as CustomizeRouteImport } from './routes/customize'
 import { Route as AiAgentRouteImport } from './routes/ai-agent'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as ToolsQrCodeRouteImport } from './routes/tools.qr-code'
 import { Route as PaymentSuccessRouteImport } from './routes/payment.success'
 import { Route as PaymentFailedRouteImport } from './routes/payment.failed'
 import { Route as DashboardVoiceGeneratorRouteImport } from './routes/dashboard.voice-generator'
@@ -178,6 +179,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
+} as any)
+const ToolsQrCodeRoute = ToolsQrCodeRouteImport.update({
+  id: '/tools/qr-code',
+  path: '/tools/qr-code',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
   id: '/payment/success',
@@ -644,6 +650,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/voice-generator': typeof DashboardVoiceGeneratorRoute
   '/payment/failed': typeof PaymentFailedRoute
   '/payment/success': typeof PaymentSuccessRoute
+  '/tools/qr-code': typeof ToolsQrCodeRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/db/$tableId': typeof ApiDbTableIdRouteWithChildren
   '/dashboard/admin/apps': typeof DashboardAdminAppsRoute
@@ -737,6 +744,7 @@ export interface FileRoutesByTo {
   '/dashboard/voice-generator': typeof DashboardVoiceGeneratorRoute
   '/payment/failed': typeof PaymentFailedRoute
   '/payment/success': typeof PaymentSuccessRoute
+  '/tools/qr-code': typeof ToolsQrCodeRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/db/$tableId': typeof ApiDbTableIdRouteWithChildren
   '/dashboard/admin/apps': typeof DashboardAdminAppsRoute
@@ -834,6 +842,7 @@ export interface FileRoutesById {
   '/dashboard/voice-generator': typeof DashboardVoiceGeneratorRoute
   '/payment/failed': typeof PaymentFailedRoute
   '/payment/success': typeof PaymentSuccessRoute
+  '/tools/qr-code': typeof ToolsQrCodeRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/db/$tableId': typeof ApiDbTableIdRouteWithChildren
   '/dashboard/admin/apps': typeof DashboardAdminAppsRoute
@@ -932,6 +941,7 @@ export interface FileRouteTypes {
     | '/dashboard/voice-generator'
     | '/payment/failed'
     | '/payment/success'
+    | '/tools/qr-code'
     | '/dashboard/'
     | '/api/db/$tableId'
     | '/dashboard/admin/apps'
@@ -1025,6 +1035,7 @@ export interface FileRouteTypes {
     | '/dashboard/voice-generator'
     | '/payment/failed'
     | '/payment/success'
+    | '/tools/qr-code'
     | '/dashboard'
     | '/api/db/$tableId'
     | '/dashboard/admin/apps'
@@ -1121,6 +1132,7 @@ export interface FileRouteTypes {
     | '/dashboard/voice-generator'
     | '/payment/failed'
     | '/payment/success'
+    | '/tools/qr-code'
     | '/dashboard/'
     | '/api/db/$tableId'
     | '/dashboard/admin/apps'
@@ -1192,6 +1204,7 @@ export interface RootRouteChildren {
   UnsubscribeRoute: typeof UnsubscribeRoute
   PaymentFailedRoute: typeof PaymentFailedRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
+  ToolsQrCodeRoute: typeof ToolsQrCodeRoute
   ApiDbTableIdRoute: typeof ApiDbTableIdRouteWithChildren
   SSlugAboutRoute: typeof SSlugAboutRoute
   SSlugCartRoute: typeof SSlugCartRoute
@@ -1322,6 +1335,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/tools/qr-code': {
+      id: '/tools/qr-code'
+      path: '/tools/qr-code'
+      fullPath: '/tools/qr-code'
+      preLoaderRoute: typeof ToolsQrCodeRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/payment/success': {
       id: '/payment/success'
@@ -2060,6 +2080,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnsubscribeRoute: UnsubscribeRoute,
   PaymentFailedRoute: PaymentFailedRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
+  ToolsQrCodeRoute: ToolsQrCodeRoute,
   ApiDbTableIdRoute: ApiDbTableIdRouteWithChildren,
   SSlugAboutRoute: SSlugAboutRoute,
   SSlugCartRoute: SSlugCartRoute,

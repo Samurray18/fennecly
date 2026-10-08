@@ -7,6 +7,7 @@
     "signIn": "Sign in",
     "getStarted": "Get Started",
     "themes": "Themes",
+    "tools": "QR Code",
     "toggleDark": "Toggle dark mode",
     "toggleMenu": "Toggle menu"
   },
@@ -122,25 +123,69 @@
       "name": "Beginner",
       "desc": "Everything you need to launch your first store.",
       "cta": "Start Beginner",
-      "f": ["250 credits", "1 online store", "300 orders", "SEO Optimizer", "Abandoned Cart Recovery", "Chatbot", "Analytics Integration", "1 domain", "All delivery services", "10 free themes", "24/7 support chat"]
+      "f": [
+        "250 credits",
+        "1 online store",
+        "300 orders",
+        "SEO Optimizer",
+        "Abandoned Cart Recovery",
+        "Chatbot",
+        "Analytics Integration",
+        "1 domain",
+        "All delivery services",
+        "10 free themes",
+        "24/7 support chat"
+      ]
     },
     "pro": {
       "name": "Pro",
       "desc": "For growing brands ready to scale with AI.",
       "cta": "Start Pro",
-      "f": ["600 credits", "2 online stores", "700 orders", "AI Product Descriptions", "AI Image Enhancer", "AI Ad Generator", "SEO Optimizer", "Abandoned Cart Recovery", "Chatbot", "Analytics Integration", "Developer access", "2 domains", "All delivery services", "All premium themes", "24/7 support chat"]
+      "f": [
+        "600 credits",
+        "2 online stores",
+        "700 orders",
+        "AI Product Descriptions",
+        "AI Image Enhancer",
+        "AI Ad Generator",
+        "SEO Optimizer",
+        "Abandoned Cart Recovery",
+        "Chatbot",
+        "Analytics Integration",
+        "Developer access",
+        "2 domains",
+        "All delivery services",
+        "All premium themes",
+        "24/7 support chat"
+      ]
     },
     "business": {
       "name": "Business",
       "desc": "Advanced tools for serious sellers.",
       "cta": "Choose Business",
-      "f": ["1,200 credits", "10 online stores", "3,000 orders", "Email Marketing", "All AI apps", "All Pro tools", "Developer access", "24/7 support chat"]
+      "f": [
+        "1,200 credits",
+        "10 online stores",
+        "3,000 orders",
+        "Email Marketing",
+        "All AI apps",
+        "All Pro tools",
+        "Developer access",
+        "24/7 support chat"
+      ]
     },
     "agency": {
       "name": "Agency",
       "desc": "Unlimited power for agencies and large teams.",
       "cta": "Contact sales",
-      "f": ["5,000 credits", "Unlimited online stores", "Unlimited orders", "Everything in Business", "100 customized boxes + 100 customized package bags", "24/7 support chat"]
+      "f": [
+        "5,000 credits",
+        "Unlimited online stores",
+        "Unlimited orders",
+        "Everything in Business",
+        "100 customized boxes + 100 customized package bags",
+        "24/7 support chat"
+      ]
     },
     "free": {
       "name": "Free",
@@ -188,6 +233,7 @@
     "features": "Features",
     "pricing": "Pricing",
     "themes": "Themes",
+    "qrTool": "Free QR code generator",
     "integrations": "Integrations",
     "about": "About",
     "contact": "Contact",
@@ -295,9 +341,18 @@
         "customers": "Customers"
       },
       "actions": {
-        "addProduct": { "title": "Add Product", "desc": "List a new item in your catalog." },
-        "customize": { "title": "Customize Store", "desc": "Pick a theme and brand your store." },
-        "viewStore": { "title": "View Store", "desc": "See what your customers see." }
+        "addProduct": {
+          "title": "Add Product",
+          "desc": "List a new item in your catalog."
+        },
+        "customize": {
+          "title": "Customize Store",
+          "desc": "Pick a theme and brand your store."
+        },
+        "viewStore": {
+          "title": "View Store",
+          "desc": "See what your customers see."
+        }
       },
       "recentOrders": "Recent orders",
       "viewAll": "View all",
@@ -316,11 +371,26 @@
       "checklistDesc": "Complete a few steps to get your store ready for customers.",
       "continueSetup": "Continue setup",
       "checklistSteps": {
-        "storeInfo": { "title": "Add store information", "desc": "Set your store name, logo and business details." },
-        "products": { "title": "Add products", "desc": "Add your first product or import from catalog." },
-        "payments": { "title": "Configure payments", "desc": "Set up payment methods to receive payments." },
-        "customize": { "title": "Customize your store", "desc": "Choose a theme and make it uniquely yours." },
-        "launch": { "title": "Launch your store", "desc": "Review everything and go live for your customers." }
+        "storeInfo": {
+          "title": "Add store information",
+          "desc": "Set your store name, logo and business details."
+        },
+        "products": {
+          "title": "Add products",
+          "desc": "Add your first product or import from catalog."
+        },
+        "payments": {
+          "title": "Configure payments",
+          "desc": "Set up payment methods to receive payments."
+        },
+        "customize": {
+          "title": "Customize your store",
+          "desc": "Choose a theme and make it uniquely yours."
+        },
+        "launch": {
+          "title": "Launch your store",
+          "desc": "Review everything and go live for your customers."
+        }
       },
       "subActive": "Subscription active",
       "subActiveDesc": "Your plan is active. All features are unlocked.",
@@ -878,17 +948,38 @@
       "activateStore": "Activate your store so it's publicly visible"
     },
     "milestones": {
-      "first_product": { "label": "First product", "description": "Add your first product" },
+      "first_product": {
+        "label": "First product",
+        "description": "Add your first product"
+      },
       "first_published": {
         "label": "First published product",
         "description": "Publish your first product"
       },
-      "ten_products": { "label": "10 products", "description": "Add 10 products" },
-      "first_sale": { "label": "First sale", "description": "Receive your first order" },
-      "ten_orders": { "label": "10 orders", "description": "Receive 10 orders" },
-      "hundred_orders": { "label": "100 orders", "description": "Receive 100 orders" },
-      "first_revenue": { "label": "First revenue", "description": "Earn your first revenue" },
-      "revenue_100k": { "label": "100,000 DA", "description": "Earn 100,000 DA in revenue" }
+      "ten_products": {
+        "label": "10 products",
+        "description": "Add 10 products"
+      },
+      "first_sale": {
+        "label": "First sale",
+        "description": "Receive your first order"
+      },
+      "ten_orders": {
+        "label": "10 orders",
+        "description": "Receive 10 orders"
+      },
+      "hundred_orders": {
+        "label": "100 orders",
+        "description": "Receive 100 orders"
+      },
+      "first_revenue": {
+        "label": "First revenue",
+        "description": "Earn your first revenue"
+      },
+      "revenue_100k": {
+        "label": "100,000 DA",
+        "description": "Earn 100,000 DA in revenue"
+      }
     },
     "voice": {
       "title": "Voice Announcements",
@@ -929,6 +1020,150 @@
       "clickWilaya": "Click any wilaya on the map to see delivery prices",
       "selectOrigin": "Choose your wilaya...",
       "detect": "Auto-detect"
+    }
+  },
+  "tools": {
+    "qr": {
+      "hero": {
+        "badge": "Free QR code generator",
+        "title": "Create a QR code in seconds",
+        "subtitle": "Free, unlimited QR codes for links, WhatsApp, Wi-Fi, phone and email. Custom colours, your own logo, PNG and SVG download — no signup required."
+      },
+      "types": {
+        "url": "URL",
+        "whatsapp": "WhatsApp",
+        "text": "Text",
+        "wifi": "Wi-Fi",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "form": {
+        "title": "Configure your code"
+      },
+      "fields": {
+        "url": "Website URL",
+        "urlHint": "A full address or just a domain — we add https:// if it is missing.",
+        "whatsappPhone": "WhatsApp number",
+        "whatsappPhoneHint": "Include the country code, for example +213 555 12 34 56.",
+        "whatsappMessage": "Prefilled message (optional)",
+        "whatsappMessageHint": "The chat opens with this message ready to send.",
+        "text": "Text",
+        "textHint": "Any plain text, within the capacity of the selected error correction level.",
+        "ssid": "Network name (SSID)",
+        "ssidHint": "Shown in the phone's Wi-Fi list.",
+        "wifiSecurity": "Security",
+        "wifiPassword": "Password",
+        "wifiPasswordHint": "Required for WPA and WEP networks.",
+        "phone": "Phone number",
+        "phoneHint": "Include the country code, for example +213 555 12 34 56.",
+        "email": "Email address",
+        "emailHint": "Scanning opens the visitor's email app.",
+        "emailSubject": "Subject (optional)",
+        "emailBody": "Message (optional)",
+        "optionalHint": "Optional"
+      },
+      "placeholders": {
+        "url": "https://example.com",
+        "phone": "+213 555 12 34 56",
+        "whatsappMessage": "Hello! I would like to order…",
+        "text": "Type or paste anything…",
+        "ssid": "My network",
+        "wifiPassword": "Network password",
+        "email": "shop@example.com",
+        "emailSubject": "Order question",
+        "emailBody": "Hello, I would like to know…"
+      },
+      "wifi": {
+        "wpa": "WPA/WPA2",
+        "wep": "WEP",
+        "none": "None"
+      },
+      "customize": {
+        "title": "Customize",
+        "foreground": "Foreground",
+        "background": "Background",
+        "colorPreview": "Colour preview",
+        "size": "Size",
+        "errorCorrection": "Error correction",
+        "logoLocked": "A logo is applied, so error correction is fixed at level H to keep the code scannable.",
+        "logo": "Centre logo",
+        "logoUpload": "Upload an image (PNG, JPG…)",
+        "logoSet": "Logo added — error correction set to H",
+        "logoRemove": "Remove logo",
+        "logoAlt": "Uploaded logo",
+        "logoHint": "Processed locally in your browser and never uploaded. A logo needs error correction level H."
+      },
+      "preview": {
+        "title": "Live preview",
+        "placeholder": "Fill in the details to generate your QR code",
+        "canvasLabel": "QR code preview",
+        "lowContrast": "The contrast between these colours is too low — most cameras will not scan this code.",
+        "generateError": "This content is too large for a QR code. Try shorter text or a lower error correction level."
+      },
+      "output": {
+        "png": "Download PNG",
+        "svg": "Download SVG",
+        "copy": "Copy",
+        "hint": "Downloads are generated at the selected size. PNG is best for screens, SVG for print.",
+        "imageCopied": "QR code copied to your clipboard",
+        "textCopied": "This browser can't copy images — the QR content was copied as text instead.",
+        "copyFailed": "Could not copy to the clipboard",
+        "downloadFailed": "Download failed"
+      },
+      "logo": {
+        "tooLarge": "This image is over 2 MB. Please choose a smaller file.",
+        "failed": "Could not read this image. Try a PNG or JPG file."
+      },
+      "errors": {
+        "required": "This field is required.",
+        "invalidUrl": "Enter a valid website address, like example.com",
+        "invalidPhone": "Enter a valid phone number with its country code.",
+        "invalidEmail": "Enter a valid email address.",
+        "ssidTooLong": "A network name can be at most 32 characters.",
+        "tooLong": "This content is too long for a QR code. Try shortening it.",
+        "invalidColor": "Use a 6-digit hex colour like #0b0a14",
+        "sameColor": "Foreground and background cannot be the same colour.",
+        "invalidSize": "Choose a size between 256 and 1024 pixels."
+      },
+      "ecHint": {
+        "L": "Level L — recovers 7% of errors, the most compact.",
+        "M": "Level M — recovers 15% of errors, the best balance.",
+        "Q": "Level Q — recovers 25% of errors, for small or handled prints.",
+        "H": "Level H — recovers 30% of errors, ideal with a logo."
+      },
+      "useCases": {
+        "title": "Why use QR codes for your online store",
+        "body": "A QR code bridges your packaging and your digital store — customers need no extra app, just their phone camera.",
+        "packaging": "Print on packaging",
+        "packagingBody": "Add a code to boxes, bags and labels so customers reorder, leave a review or reach your shop page.",
+        "whatsapp": "WhatsApp order button",
+        "whatsappBody": "Open a prefilled WhatsApp chat so a scan starts a conversation with your message ready to send.",
+        "social": "Social media links",
+        "socialBody": "Send followers from flyers, business cards and posters straight to your shop in one scan.",
+        "tracking": "Order tracking on delivery slips",
+        "trackingBody": "Put a code on delivery slips so buyers open tracking without typing a long link."
+      },
+      "cta": {
+        "badge": "Free forever",
+        "title": "Selling online in Algeria? Create your free Fennecly store",
+        "body": "Manage products, orders, delivery and payments from one dashboard — built for Algerian sellers, in French, Arabic and English.",
+        "button": "Create your free store",
+        "secondary": "Already have an account? Sign in"
+      },
+      "faq": {
+        "title": "QR code FAQ",
+        "body": "Everything you need to know before printing your codes.",
+        "whatQ": "What is a QR code?",
+        "whatA": "A QR code is a scannable square barcode that can store text, links, Wi-Fi logins and contact details. Point a phone camera at it and the content opens instantly — no typing required.",
+        "accountQ": "Is this QR code generator free?",
+        "accountA": "Yes. The generator is free to use and needs no account or login. Every code you create works forever and can be downloaded as a PNG or SVG.",
+        "colorsQ": "Will changing the colours break the QR code?",
+        "colorsA": "Not if there is enough contrast between the foreground and background. The tool warns you when contrast drops below the safe 3:1 threshold.",
+        "correctionQ": "What error correction level should I choose?",
+        "correctionA": "Level M is a good balance of density and durability for most codes. Use Q or H when the code will be printed small, handled often, or overlaid with a logo — the tool switches to H automatically when you add a logo.",
+        "expiryQ": "Do QR codes expire?",
+        "expiryA": "No. Static QR codes like these store their content directly in the image, so they never expire and never require a subscription."
+      }
     }
   }
 }
