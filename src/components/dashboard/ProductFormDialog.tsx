@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Loader2, Upload, X, Mic, Plus, ImageIcon, ArrowRight, ArrowLeft, Package, DollarSign, Layers, Image, Settings, GripVertical } from "lucide-react";
+import { Loader2, Upload, X, Mic, Plus, ImageIcon, ArrowRight, ArrowLeft, Package, DollarSign, Layers, Image, Settings, GripVertical, Percent } from "lucide-react";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -79,6 +80,7 @@ export type Product = {
   status: "draft" | "published";
   variants: ProductVariant[];
   sales_count: number;
+  cost_price?: number | null;
 };
 
 const schema = z.object({
@@ -152,6 +154,7 @@ const WIZARD_STEPS = [
 export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Props) {
   const { user } = useAuth();
   const { currentStore } = useCurrentStore();
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -161,6 +164,7 @@ export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Prop
   const [category, setCategory] = useState<string>("");
   const [sku, setSku] = useState("");
   const [weight, setWeight] = useState("");
+  const [costPrice, setCostPrice] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [status, setStatus] = useState<"draft" | "published">("draft");
@@ -184,6 +188,7 @@ export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Prop
       setCategory(product?.category ?? "");
       setSku(product?.sku ?? "");
       setWeight(product?.weight != null ? String(product.weight) : "");
+      setCostPrice(product?.cost_price != null ? String(product.cost_price) : "");
       setTags(product?.tags ?? []);
       setStatus(product?.status ?? "draft");
       setVariants(product?.variants ?? []);
@@ -318,6 +323,13 @@ export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Prop
     setInstagramOpen(false);
   };
 
+  const priceNum = Number(price);
+  const costNum = Number(costPrice);
+  const marginPct =
+    costPrice.trim() !== "" && Number.isFinite(priceNum) && priceNum > 0 && Number.isFinite(costNum)
+      ? Math.round(((priceNum - costNum) / priceNum) * 100)
+      : null;
+
   const save = async () => {
     if (!user) return;
     const parsed = schema.safeParse({
@@ -334,6 +346,14 @@ export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Prop
       toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
     }
+
+    const trimmedCost = costPrice.trim();
+    const costValue = trimmedCost === "" ? null : Number(trimmedCost);
+    if (costValue !== null && (!Number.isFinite(costValue) || costValue < 0)) {
+      toast.error(t("dashboard.costs.invalidCost"));
+      return;
+    }
+
     setSaving(true);
     const payload = {
       name: parsed.data.name,
@@ -349,17 +369,45 @@ export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Prop
       variants,
       images,
     };
-    const { error } = product
-      ? await supabase.from("products").update(payload).eq("id", product.id)
-      : await supabase
-          .from("products")
-          .insert({ ...payload, user_id: user.id, store_id: currentStore?.id ?? null });
-    setSaving(false);
-    if (error) {
-      playSound("error");
-      toast.error(error.message);
-      return;
+    let savedId: string | null = product?.id ?? null;
+    if (product) {
+      const { error } = await supabase.from("products").update(payload).eq("id", product.id);
+      if (error) {
+        setSaving(false);
+        playSound("error");
+        toast.error(error.message);
+        return;
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("products")
+        .insert({ ...payload, user_id: user.id, store_id: currentStore?.id ?? null })
+        .select("id")
+        .single();
+      if (error) {
+        setSaving(false);
+        playSound("error");
+        toast.error(error.message);
+        return;
+      }
+      savedId = data?.id ?? null;
     }
+
+    // Private cost data — written with the user session (RLS), never the service role.
+    if (savedId) {
+      const costRes =
+        costValue === null
+          ? await supabase.from("product_costs").delete().eq("product_id", savedId)
+          : await supabase
+              .from("product_costs")
+              .upsert(
+                { product_id: savedId, owner_id: user.id, cost_price: costValue },
+                { onConflict: "product_id" },
+              );
+      if (costRes.error) toast.error(t("dashboard.costs.costSaveFailed"));
+    }
+
+    setSaving(false);
     playSound("success");
     toast.success(product ? "Product updated" : "Product created");
     onOpenChange(false);
@@ -482,7 +530,19 @@ export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Prop
                   />
                 </div>
               </div>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="cost_price">{t("dashboard.costs.productCostLabel")}</Label>
+                  <Input
+                    id="cost_price"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={costPrice}
+                    onChange={(e) => setCostPrice(e.target.value)}
+                    placeholder={t("dashboard.costs.optional")}
+                  />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
                   <Select value={category} onValueChange={setCategory}>
@@ -511,6 +571,20 @@ export function ProductFormDialog({ open, onOpenChange, product, onSaved }: Prop
                   />
                 </div>
               </div>
+              {marginPct !== null && (
+                <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm">
+                  <Percent className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">{t("dashboard.costs.marginLabel")}</span>
+                  <span
+                    className={cn(
+                      "font-semibold",
+                      marginPct >= 0 ? "text-emerald-600" : "text-rose-600",
+                    )}
+                  >
+                    {marginPct}%
+                  </span>
+                </div>
+              )}
             </div>
           )}
 

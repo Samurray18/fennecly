@@ -716,6 +716,21 @@
       "presetsTitle": "تعبئة سريعة من متجرك",
       "presetStore": "رابط متجري",
       "presetWhatsapp": "زر الطلب عبر واتساب"
+    },
+    "costs": {
+      "productCostLabel": "سعر التكلفة (دج)",
+      "optional": "اختياري",
+      "marginLabel": "هامش الربح",
+      "marginBadge": "هامش {{pct}}%",
+      "invalidCost": "يجب أن تكون التكلفة رقمًا يساوي 0 أو أكثر",
+      "costSaveFailed": "تم حفظ المنتج، لكن تعذّر حفظ التكلفة.",
+      "orderCostsTitle": "التكاليف",
+      "orderCostsDescription": "تكاليف التوصيل والإرجاع الخاصة بهذا الطلب. لا تظهر للعملاء أبدًا.",
+      "deliveryCostLabel": "تكلفة التوصيل (دج)",
+      "returnCostLabel": "تكلفة الإرجاع (دج)",
+      "save": "حفظ التكاليف",
+      "saveFailed": "تعذّر حفظ التكاليف. حاول مرة أخرى.",
+      "saved": "تم حفظ التكاليف"
     }
   },
   "common": {

@@ -716,6 +716,21 @@
       "presetsTitle": "Remplissage rapide depuis votre boutique",
       "presetStore": "Lien de ma boutique",
       "presetWhatsapp": "Bouton de commande WhatsApp"
+    },
+    "costs": {
+      "productCostLabel": "Prix de revient (DA)",
+      "optional": "Facultatif",
+      "marginLabel": "Marge",
+      "marginBadge": "Marge {{pct}} %",
+      "invalidCost": "Le coût doit être un nombre supérieur ou égal à 0",
+      "costSaveFailed": "Produit enregistré, mais le coût n'a pas pu être enregistré.",
+      "orderCostsTitle": "Coûts",
+      "orderCostsDescription": "Coûts de livraison et de retour privés pour cette commande. Jamais visibles par les clients.",
+      "deliveryCostLabel": "Coût de livraison (DA)",
+      "returnCostLabel": "Coût de retour (DA)",
+      "save": "Enregistrer les coûts",
+      "saveFailed": "Impossible d'enregistrer les coûts. Veuillez réessayer.",
+      "saved": "Coûts enregistrés"
     }
   },
   "common": {

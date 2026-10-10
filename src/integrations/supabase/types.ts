@@ -1601,6 +1601,47 @@ export type Database = {
         }
         Relationships: []
       }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          expense_date: string
+          id: string
+          note: string | null
+          owner_id: string
+          store_id: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          expense_date?: string
+          id?: string
+          note?: string | null
+          owner_id: string
+          store_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          expense_date?: string
+          id?: string
+          note?: string | null
+          owner_id?: string
+          store_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ig_conversations: {
         Row: {
           ai_confidence: number | null
@@ -1886,6 +1927,48 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      order_costs: {
+        Row: {
+          delivery_cost: number
+          order_id: string
+          owner_id: string
+          return_cost: number
+          store_id: string
+          updated_at: string
+        }
+        Insert: {
+          delivery_cost?: number
+          order_id: string
+          owner_id: string
+          return_cost?: number
+          store_id: string
+          updated_at?: string
+        }
+        Update: {
+          delivery_cost?: number
+          order_id?: string
+          owner_id?: string
+          return_cost?: number
+          store_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_costs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_costs_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       order_items: {
         Row: {
@@ -2242,6 +2325,35 @@ export type Database = {
             columns: ["store_id"]
             isOneToOne: false
             referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_costs: {
+        Row: {
+          cost_price: number
+          owner_id: string
+          product_id: string
+          updated_at: string
+        }
+        Insert: {
+          cost_price: number
+          owner_id: string
+          product_id: string
+          updated_at?: string
+        }
+        Update: {
+          cost_price?: number
+          owner_id?: string
+          product_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_costs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]

@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import type { ComponentType, ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { z } from "zod";
+import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
   Loader2,
@@ -21,10 +23,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
+import { useCurrentStore } from "@/hooks/use-current-store";
 import { supabase } from "@/integrations/supabase/client";
 import { trackOrderShipment, type TrackingDTO } from "@/lib/delivery/track-shipment.functions";
 import { WhatsAppCallButton } from "@/components/dashboard/WhatsAppCallButton";
@@ -105,9 +110,16 @@ const FLOW_LABELS: Record<StatusFlow, string> = {
   delivered: "Delivered",
 };
 
+const costsSchema = z.object({
+  delivery_cost: z.number().min(0, "Cost cannot be negative").max(100_000_000),
+  return_cost: z.number().min(0, "Cost cannot be negative").max(100_000_000),
+});
+
 function TrackingPage() {
   const { orderId } = Route.useParams();
   const { user } = useAuth();
+  const { currentStore } = useCurrentStore();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const trackFn = useServerFn(trackOrderShipment);
 
@@ -125,6 +137,9 @@ function TrackingPage() {
   const { printBordereaux, loading: printingBordereau } = useBordereaux();
   const [codTracked, setCodTracked] = useState<boolean | null>(null);
   const [codLogging, setCodLogging] = useState(false);
+  const [deliveryCost, setDeliveryCost] = useState("");
+  const [returnCost, setReturnCost] = useState("");
+  const [costSaving, setCostSaving] = useState(false);
 
   const loadOrder = async () => {
     if (!user) return;
@@ -207,6 +222,54 @@ function TrackingPage() {
       .maybeSingle()
       .then(({ data }) => setCodTracked(!!data));
   }, [user, orderId]);
+
+  useEffect(() => {
+    if (!user || !orderId) return;
+    supabase
+      .from("order_costs")
+      .select("delivery_cost,return_cost")
+      .eq("order_id", orderId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) return;
+        setDeliveryCost(String(data.delivery_cost));
+        setReturnCost(String(data.return_cost));
+      });
+  }, [user, orderId]);
+
+  const saveCosts = async () => {
+    if (!user || !order) return;
+    const storeId = order.store_id ?? currentStore?.id ?? null;
+    const parsed = costsSchema.safeParse({
+      delivery_cost: deliveryCost.trim() === "" ? 0 : Number(deliveryCost),
+      return_cost: returnCost.trim() === "" ? 0 : Number(returnCost),
+    });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
+      return;
+    }
+    if (!storeId) {
+      toast.error(t("dashboard.costs.saveFailed"));
+      return;
+    }
+    setCostSaving(true);
+    const { error } = await supabase.from("order_costs").upsert(
+      {
+        order_id: order.id,
+        owner_id: user.id,
+        store_id: storeId,
+        delivery_cost: parsed.data.delivery_cost,
+        return_cost: parsed.data.return_cost,
+      },
+      { onConflict: "order_id" },
+    );
+    setCostSaving(false);
+    if (error) {
+      toast.error(t("dashboard.costs.saveFailed"));
+      return;
+    }
+    toast.success(t("dashboard.costs.saved"));
+  };
 
   const logToCOD = async () => {
     if (!user || !order) return;
@@ -650,6 +713,53 @@ function TrackingPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Private cost data — never shown on the storefront */}
+      <Card className="border-border/60 mt-6">
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <Wallet className="h-4 w-4" />
+            {t("dashboard.costs.orderCostsTitle")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-xs text-muted-foreground">
+            {t("dashboard.costs.orderCostsDescription")}
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="delivery_cost">{t("dashboard.costs.deliveryCostLabel")}</Label>
+              <Input
+                id="delivery_cost"
+                type="number"
+                step="0.01"
+                min="0"
+                value={deliveryCost}
+                onChange={(e) => setDeliveryCost(e.target.value)}
+                placeholder="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="return_cost">{t("dashboard.costs.returnCostLabel")}</Label>
+              <Input
+                id="return_cost"
+                type="number"
+                step="0.01"
+                min="0"
+                value={returnCost}
+                onChange={(e) => setReturnCost(e.target.value)}
+                placeholder="0"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button onClick={saveCosts} disabled={costSaving}>
+              {costSaving && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
+              {t("dashboard.costs.save")}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import {
   ImageIcon,
   MoreHorizontal,
@@ -65,6 +66,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Img } from "@/components/ui/Img";
 import { formatPrice as fmtPrice } from "@/lib/storeTheme";
+import { cn } from "@/lib/utils";
 import { ProductImportDialog } from "@/components/dashboard/ProductImportDialog";
 import { formatDistanceToNow } from "date-fns";
 
@@ -80,6 +82,7 @@ function ProductsPage() {
   const { user } = useAuth();
   const { currentStore, loading: storeLoading } = useCurrentStore();
   const { isExpired } = useSubscription();
+  const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -96,6 +99,11 @@ function ProductsPage() {
   const [lastImport, setLastImport] = useState<{ imported_rows: number; created_at: string; filename: string | null } | null>(null);
 
   const formatPrice = (n: number) => fmtPrice(n, currentStore?.currency ?? "DZD");
+
+  const marginFor = (p: Product): number | null =>
+    p.cost_price != null && p.price > 0
+      ? Math.round(((p.price - p.cost_price) / p.price) * 100)
+      : null;
 
   const load = useCallback(async () => {
     if (!user || storeLoading) return;
@@ -130,6 +138,16 @@ function ProductsPage() {
         toast.error("Failed to load products. Please try again.");
         return;
       }
+      // Fetch all product costs in a single query (private table, user RLS).
+      const costMap: Record<string, number> = {};
+      const productIds = data.map((p) => p.id);
+      if (productIds.length > 0) {
+        const { data: costs } = await supabase
+          .from("product_costs")
+          .select("product_id,cost_price")
+          .in("product_id", productIds);
+        for (const c of costs ?? []) costMap[c.product_id] = Number(c.cost_price);
+      }
       setProducts(
         data.map((p) => ({
           ...p,
@@ -140,6 +158,7 @@ function ProductsPage() {
           status: (p.status ?? "draft") as "draft" | "published",
           variants: (Array.isArray(p.variants) ? p.variants : []) as ProductVariant[],
           sales_count: p.sales_count ?? 0,
+          cost_price: costMap[p.id] ?? null,
         })),
       );
       setSelected(new Set());
@@ -507,6 +526,23 @@ function ProductsPage() {
                               {formatPrice(p.sale_price)}
                             </div>
                           )}
+                          {(() => {
+                            const m = marginFor(p);
+                            if (m === null) return null;
+                            return (
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  "mt-1 font-normal",
+                                  m >= 0
+                                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+                                    : "border-rose-500/40 bg-rose-500/10 text-rose-700 dark:text-rose-400",
+                                )}
+                              >
+                                {t("dashboard.costs.marginBadge", { pct: m })}
+                              </Badge>
+                            );
+                          })()}
                         </TableCell>
                         <TableCell className="text-right">
                           {p.stock === 0 ? (

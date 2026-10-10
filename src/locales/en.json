@@ -716,6 +716,21 @@
       "presetsTitle": "Quick fill from your store",
       "presetStore": "My store link",
       "presetWhatsapp": "WhatsApp order button"
+    },
+    "costs": {
+      "productCostLabel": "Cost price (DA)",
+      "optional": "Optional",
+      "marginLabel": "Margin",
+      "marginBadge": "{{pct}}% margin",
+      "invalidCost": "Cost must be a number of 0 or more",
+      "costSaveFailed": "Product saved, but the cost could not be saved.",
+      "orderCostsTitle": "Costs",
+      "orderCostsDescription": "Private delivery and return costs for this order. Never shown to customers.",
+      "deliveryCostLabel": "Delivery cost (DA)",
+      "returnCostLabel": "Return cost (DA)",
+      "save": "Save costs",
+      "saveFailed": "Could not save costs. Please try again.",
+      "saved": "Costs saved"
     }
   },
   "common": {
