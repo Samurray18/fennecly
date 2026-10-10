@@ -316,6 +316,7 @@
       "aboutPage": "Page À propos",
       "contactPage": "Page Contact",
       "analytics": "Statistiques",
+      "profit": "Bénéfice",
       "database": "Base de données",
       "landingGenerator": "Générateur de page",
       "credits": "Crédits",
@@ -731,6 +732,117 @@
       "save": "Enregistrer les coûts",
       "saveFailed": "Impossible d'enregistrer les coûts. Veuillez réessayer.",
       "saved": "Coûts enregistrés"
+    },
+    "profit": {
+      "eyebrow": "Finance",
+      "title": "Bénéfice",
+      "description": "Découvrez votre bénéfice réel après les coûts des produits, de livraison, de retour et les dépenses.",
+      "dateFootnote": "Basé sur la date de la commande.",
+      "loadFailed": "Impossible de charger les données de bénéfice.",
+      "retry": "Réessayer",
+      "empty": "Aucune donnée pour cette période",
+      "emptyHint": "Les commandes livrées et les dépenses apparaîtront ici.",
+      "pagination": "{{from}}–{{to}} sur {{total}}",
+      "previous": "Page précédente",
+      "next": "Page suivante",
+      "ranges": {
+        "today": "Aujourd'hui",
+        "last7": "7 derniers jours",
+        "last30": "30 derniers jours",
+        "thisMonth": "Ce mois-ci",
+        "lastMonth": "Le mois dernier",
+        "custom": "Personnalisé"
+      },
+      "rangePicker": {
+        "apply": "Appliquer",
+        "cancel": "Annuler"
+      },
+      "kpi": {
+        "netProfit": "Bénéfice net",
+        "netProfitHint": "Chiffre d'affaires moins les remboursements, coûts produits, livraison, retours et dépenses.",
+        "revenue": "Chiffre d'affaires",
+        "cogs": "Coût des marchandises",
+        "deliveryCosts": "Coûts de livraison",
+        "returnLosses": "Pertes de retour",
+        "expenses": "Dépenses",
+        "margin": "Marge",
+        "pipeline": "En cours"
+      },
+      "warnings": {
+        "missingProductTitle": "Coûts produits manquants",
+        "missingProductBody": "{{count}} commande(s) livrée(s) contiennent des articles sans prix de revient, leur bénéfice est donc surestimé.",
+        "goToProducts": "Définir les coûts",
+        "missingDeliveryTitle": "Coûts de livraison manquants",
+        "missingDeliveryBody": "{{count}} commande(s) livrée(s) n'ont aucun coût de livraison enregistré.",
+        "goToOrders": "Voir les commandes",
+        "unknownStatusTitle": "Statuts non reconnus",
+        "unknownStatusBody": "{{count}} commande(s) ont un statut non reconnu et sont exclues du bénéfice."
+      },
+      "chart": {
+        "title": "Bénéfice net quotidien",
+        "description": "Bénéfice net par jour avec le chiffre d'affaires en superposition.",
+        "netProfit": "Bénéfice net",
+        "revenue": "Chiffre d'affaires"
+      },
+      "tabs": {
+        "byProduct": "Par produit",
+        "byOrder": "Par commande"
+      },
+      "byProductCols": {
+        "product": "Produit",
+        "units": "Unités",
+        "revenue": "Chiffre d'affaires",
+        "cost": "Coût",
+        "profit": "Bénéfice",
+        "margin": "Marge",
+        "costMissing": "Sans coût"
+      },
+      "byOrderCols": {
+        "order": "Commande",
+        "status": "Statut",
+        "revenue": "Chiffre d'affaires",
+        "cost": "Coût",
+        "delivery": "Livraison",
+        "profit": "Bénéfice"
+      },
+      "status": {
+        "delivered": "Livrée",
+        "returned": "Retournée",
+        "cancelled": "Annulée",
+        "pipeline": "En cours",
+        "unknown": "Inconnu"
+      },
+      "expenses": {
+        "title": "Dépenses",
+        "description": "Publicité, emballage, salaires et autres coûts pour la période.",
+        "add": "Ajouter une dépense",
+        "addTitle": "Ajouter une dépense",
+        "addDescription": "Enregistrez une dépense. Vous seul pouvez la voir.",
+        "date": "Date",
+        "category": "Catégorie",
+        "amount": "Montant (DA)",
+        "note": "Note (facultatif)",
+        "save": "Ajouter",
+        "cancel": "Annuler",
+        "delete": "Supprimer",
+        "deleteConfirmTitle": "Supprimer la dépense ?",
+        "deleteConfirmBody": "Cette dépense sera définitivement supprimée.",
+        "added": "Dépense ajoutée",
+        "deleted": "Dépense supprimée",
+        "addFailed": "Impossible d'ajouter la dépense.",
+        "deleteFailed": "Impossible de supprimer la dépense.",
+        "invalidAmount": "Saisissez un montant supérieur à 0",
+        "invalidDate": "Choisissez une date",
+        "noExpenses": "Aucune dépense pour cette période",
+        "categories": {
+          "ads": "Publicité",
+          "packaging": "Emballage",
+          "salary": "Salaires",
+          "rent": "Loyer",
+          "software": "Logiciels",
+          "other": "Autre"
+        }
+      }
     }
   },
   "common": {

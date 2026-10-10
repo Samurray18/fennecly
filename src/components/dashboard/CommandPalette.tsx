@@ -25,6 +25,7 @@ import {
   Bell,
   Trophy,
   QrCode,
+  Wallet,
 } from "lucide-react";
 import {
   Dialog,
@@ -47,6 +48,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Customers", to: "/dashboard/customers", icon: Users, keywords: "customers clients buyers", section: "Navigation" },
   { label: "Shipments", to: "/dashboard/shipments", icon: Truck, keywords: "shipments delivery tracking", section: "Navigation" },
   { label: "Analytics", to: "/dashboard/analytics", icon: BarChart3, keywords: "analytics stats reports", section: "Navigation" },
+  { label: "Profit", to: "/dashboard/profit", icon: Wallet, keywords: "profit margin costs revenue expenses", section: "Navigation" },
   { label: "Store", to: "/dashboard/store", icon: Store, keywords: "store storefront settings", section: "Navigation" },
   { label: "Customize", to: "/customize", icon: Palette, keywords: "customize design editor theme", section: "Navigation" },
   { label: "Notifications", to: "/dashboard/notifications", icon: Bell, keywords: "notifications alerts", section: "Navigation" },

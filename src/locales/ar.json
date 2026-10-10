@@ -316,6 +316,7 @@
       "aboutPage": "صفحة من نحن",
       "contactPage": "صفحة الاتصال",
       "analytics": "التحليلات",
+      "profit": "الأرباح",
       "database": "قاعدة البيانات",
       "landingGenerator": "منشئ صفحة الهبوط",
       "credits": "الرصيد",
@@ -731,6 +732,117 @@
       "save": "حفظ التكاليف",
       "saveFailed": "تعذّر حفظ التكاليف. حاول مرة أخرى.",
       "saved": "تم حفظ التكاليف"
+    },
+    "profit": {
+      "eyebrow": "المالية",
+      "title": "الأرباح",
+      "description": "اطّلع على أرباحك الحقيقية بعد تكاليف المنتجات والتوصيل والإرجاع والمصاريف.",
+      "dateFootnote": "استنادًا إلى تاريخ الطلب.",
+      "loadFailed": "تعذّر تحميل بيانات الأرباح.",
+      "retry": "إعادة المحاولة",
+      "empty": "لا توجد بيانات لهذه الفترة",
+      "emptyHint": "ستظهر هنا الطلبات المُسلّمة والمصاريف.",
+      "pagination": "{{from}}–{{to}} من {{total}}",
+      "previous": "الصفحة السابقة",
+      "next": "الصفحة التالية",
+      "ranges": {
+        "today": "اليوم",
+        "last7": "آخر 7 أيام",
+        "last30": "آخر 30 يومًا",
+        "thisMonth": "هذا الشهر",
+        "lastMonth": "الشهر الماضي",
+        "custom": "مخصّص"
+      },
+      "rangePicker": {
+        "apply": "تطبيق",
+        "cancel": "إلغاء"
+      },
+      "kpi": {
+        "netProfit": "الربح الصافي",
+        "netProfitHint": "الإيرادات ناقص المبالغ المستردة وتكاليف المنتجات والتوصيل والإرجاع والمصاريف.",
+        "revenue": "الإيرادات",
+        "cogs": "تكلفة البضائع",
+        "deliveryCosts": "تكاليف التوصيل",
+        "returnLosses": "خسائر الإرجاع",
+        "expenses": "المصاريف",
+        "margin": "الهامش",
+        "pipeline": "قيد التنفيذ"
+      },
+      "warnings": {
+        "missingProductTitle": "تكاليف منتجات ناقصة",
+        "missingProductBody": "{{count}} طلب/طلبات مُسلّمة تحتوي على عناصر بدون سعر تكلفة، لذا فإن أرباحها مبالغ فيها.",
+        "goToProducts": "تحديد تكاليف المنتجات",
+        "missingDeliveryTitle": "تكاليف توصيل ناقصة",
+        "missingDeliveryBody": "{{count}} طلب/طلبات مُسلّمة بدون تكلفة توصيل مسجّلة.",
+        "goToOrders": "مراجعة الطلبات",
+        "unknownStatusTitle": "حالات غير معروفة",
+        "unknownStatusBody": "{{count}} طلب/طلبات بحالة غير معروفة ومستبعدة من الأرباح."
+      },
+      "chart": {
+        "title": "الربح الصافي اليومي",
+        "description": "الربح الصافي لليوم مع عرض الإيرادات.",
+        "netProfit": "الربح الصافي",
+        "revenue": "الإيرادات"
+      },
+      "tabs": {
+        "byProduct": "حسب المنتج",
+        "byOrder": "حسب الطلب"
+      },
+      "byProductCols": {
+        "product": "المنتج",
+        "units": "الوحدات",
+        "revenue": "الإيرادات",
+        "cost": "التكلفة",
+        "profit": "الربح",
+        "margin": "الهامش",
+        "costMissing": "بدون تكلفة"
+      },
+      "byOrderCols": {
+        "order": "الطلب",
+        "status": "الحالة",
+        "revenue": "الإيرادات",
+        "cost": "التكلفة",
+        "delivery": "التوصيل",
+        "profit": "الربح"
+      },
+      "status": {
+        "delivered": "مُسلّم",
+        "returned": "مُرجَع",
+        "cancelled": "ملغى",
+        "pipeline": "قيد التنفيذ",
+        "unknown": "غير معروف"
+      },
+      "expenses": {
+        "title": "المصاريف",
+        "description": "الإعلانات والتغليف والرواتب وتكاليف أخرى لهذه الفترة.",
+        "add": "إضافة مصروف",
+        "addTitle": "إضافة مصروف",
+        "addDescription": "سجّل مصروفًا. أنت وحدك من يمكنه رؤيته.",
+        "date": "التاريخ",
+        "category": "الفئة",
+        "amount": "المبلغ (دج)",
+        "note": "ملاحظة (اختياري)",
+        "save": "إضافة",
+        "cancel": "إلغاء",
+        "delete": "حذف",
+        "deleteConfirmTitle": "حذف المصروف؟",
+        "deleteConfirmBody": "سيتم حذف هذا المصروف نهائيًا.",
+        "added": "تمت إضافة المصروف",
+        "deleted": "تم حذف المصروف",
+        "addFailed": "تعذّر إضافة المصروف.",
+        "deleteFailed": "تعذّر حذف المصروف.",
+        "invalidAmount": "أدخل مبلغًا أكبر من 0",
+        "invalidDate": "اختر تاريخًا",
+        "noExpenses": "لا توجد مصاريف لهذه الفترة",
+        "categories": {
+          "ads": "إعلانات",
+          "packaging": "تغليف",
+          "salary": "رواتب",
+          "rent": "إيجار",
+          "software": "برمجيات",
+          "other": "أخرى"
+        }
+      }
     }
   },
   "common": {

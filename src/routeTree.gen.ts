@@ -39,6 +39,7 @@ import { Route as DashboardReturnsRouteImport } from './routes/dashboard.returns
 import { Route as DashboardReferralsRouteImport } from './routes/dashboard.referrals'
 import { Route as DashboardQrCodeRouteImport } from './routes/dashboard.qr-code'
 import { Route as DashboardProgressRouteImport } from './routes/dashboard.progress'
+import { Route as DashboardProfitRouteImport } from './routes/dashboard.profit'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard.products'
 import { Route as DashboardOrdersRouteImport } from './routes/dashboard.orders'
 import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
@@ -254,6 +255,11 @@ const DashboardQrCodeRoute = DashboardQrCodeRouteImport.update({
 const DashboardProgressRoute = DashboardProgressRouteImport.update({
   id: '/progress',
   path: '/progress',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProfitRoute = DashboardProfitRouteImport.update({
+  id: '/profit',
+  path: '/profit',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardProductsRoute = DashboardProductsRouteImport.update({
@@ -643,6 +649,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/notifications': typeof DashboardNotificationsRouteWithChildren
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/profit': typeof DashboardProfitRoute
   '/dashboard/progress': typeof DashboardProgressRoute
   '/dashboard/qr-code': typeof DashboardQrCodeRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
@@ -738,6 +745,7 @@ export interface FileRoutesByTo {
   '/dashboard/marketplace': typeof DashboardMarketplaceRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/profit': typeof DashboardProfitRoute
   '/dashboard/progress': typeof DashboardProgressRoute
   '/dashboard/qr-code': typeof DashboardQrCodeRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
@@ -837,6 +845,7 @@ export interface FileRoutesById {
   '/dashboard/notifications': typeof DashboardNotificationsRouteWithChildren
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/products': typeof DashboardProductsRoute
+  '/dashboard/profit': typeof DashboardProfitRoute
   '/dashboard/progress': typeof DashboardProgressRoute
   '/dashboard/qr-code': typeof DashboardQrCodeRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
@@ -937,6 +946,7 @@ export interface FileRouteTypes {
     | '/dashboard/notifications'
     | '/dashboard/orders'
     | '/dashboard/products'
+    | '/dashboard/profit'
     | '/dashboard/progress'
     | '/dashboard/qr-code'
     | '/dashboard/referrals'
@@ -1032,6 +1042,7 @@ export interface FileRouteTypes {
     | '/dashboard/marketplace'
     | '/dashboard/orders'
     | '/dashboard/products'
+    | '/dashboard/profit'
     | '/dashboard/progress'
     | '/dashboard/qr-code'
     | '/dashboard/referrals'
@@ -1130,6 +1141,7 @@ export interface FileRouteTypes {
     | '/dashboard/notifications'
     | '/dashboard/orders'
     | '/dashboard/products'
+    | '/dashboard/profit'
     | '/dashboard/progress'
     | '/dashboard/qr-code'
     | '/dashboard/referrals'
@@ -1451,6 +1463,13 @@ declare module '@tanstack/react-router' {
       path: '/progress'
       fullPath: '/dashboard/progress'
       preLoaderRoute: typeof DashboardProgressRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/profit': {
+      id: '/dashboard/profit'
+      path: '/profit'
+      fullPath: '/dashboard/profit'
+      preLoaderRoute: typeof DashboardProfitRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/products': {
@@ -1996,6 +2015,7 @@ interface DashboardRouteChildren {
   DashboardNotificationsRoute: typeof DashboardNotificationsRouteWithChildren
   DashboardOrdersRoute: typeof DashboardOrdersRoute
   DashboardProductsRoute: typeof DashboardProductsRoute
+  DashboardProfitRoute: typeof DashboardProfitRoute
   DashboardProgressRoute: typeof DashboardProgressRoute
   DashboardQrCodeRoute: typeof DashboardQrCodeRoute
   DashboardReferralsRoute: typeof DashboardReferralsRoute
@@ -2034,6 +2054,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardNotificationsRoute: DashboardNotificationsRouteWithChildren,
   DashboardOrdersRoute: DashboardOrdersRoute,
   DashboardProductsRoute: DashboardProductsRoute,
+  DashboardProfitRoute: DashboardProfitRoute,
   DashboardProgressRoute: DashboardProgressRoute,
   DashboardQrCodeRoute: DashboardQrCodeRoute,
   DashboardReferralsRoute: DashboardReferralsRoute,

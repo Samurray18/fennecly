@@ -114,6 +114,11 @@ export function DashboardTopbar({ name, avatarUrl }: { name: string; avatarUrl?:
         keywords: "analytics stats reports",
       },
       {
+        label: t("dashboard.nav.profit", { defaultValue: "Profit" }),
+        to: "/dashboard/profit",
+        keywords: "profit margin costs revenue expenses",
+      },
+      {
         label: t("dashboard.nav.database", { defaultValue: "Database" }),
         to: "/dashboard/database",
         keywords: "database tables data",

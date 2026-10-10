@@ -202,6 +202,12 @@ export function DashboardSidebar() {
           icon: BarChart3,
           gradient: "from-orange-500 to-red-500",
         },
+        {
+          title: t("dashboard.nav.profit"),
+          url: "/dashboard/profit",
+          icon: Wallet,
+          gradient: "from-emerald-500 to-teal-500",
+        },
       ],
     },
     {
