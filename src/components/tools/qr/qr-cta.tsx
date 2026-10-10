@@ -2,10 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
 
 /** Conversion block that sits directly beneath the free tool. */
 export function QrCta() {
   const { t } = useTranslation();
+  const { user, loading } = useAuth();
+  const loggedIn = !loading && user !== null;
 
   return (
     <section className="overflow-hidden rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-600/15 via-violet-600/5 to-transparent p-6 sm:p-8">
@@ -29,17 +32,26 @@ export function QrCta() {
             size="lg"
             className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/25 hover:from-violet-500 hover:to-fuchsia-500"
           >
-            <Link to="/signup">
-              {t("tools.qr.cta.button")}
-              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-            </Link>
+            {loggedIn ? (
+              <Link to="/dashboard/qr-code">
+                {t("tools.qr.cta.dashboardButton")}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </Link>
+            ) : (
+              <Link to="/signup">
+                {t("tools.qr.cta.button")}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </Link>
+            )}
           </Button>
-          <Link
-            to="/login"
-            className="text-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {t("tools.qr.cta.secondary")}
-          </Link>
+          {!loggedIn && (
+            <Link
+              to="/login"
+              className="text-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {t("tools.qr.cta.secondary")}
+            </Link>
+          )}
         </div>
       </div>
     </section>

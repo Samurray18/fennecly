@@ -43,6 +43,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Card, CardContent } from "@/components/ui/card";
 import { InstalledAppsSection } from "@/components/dashboard/InstalledAppsSection";
 import { StoreProgressCard } from "@/components/dashboard/StoreProgressCard";
+import { ZRConfirmPaymentDialog } from "@/components/dashboard/ZRConfirmPaymentDialog";
 import { WindowsAppBanner } from "@/components/dashboard/WindowsAppBanner";
 import { Img } from "@/components/ui/Img";
 import { GamificationHub } from "@/components/dashboard/core-loop/GamificationHub";
@@ -52,6 +53,7 @@ import {
   getZRExpressBalance,
   type ZRExpressBalanceResult,
 } from "@/lib/delivery/zrexpress-balance.functions";
+import { getPendingZRPayments } from "@/lib/delivery/zrexpress-payments.functions";
 import { formatPrice as fmtPrice } from "@/lib/storeTheme";
 
 export const Route = createFileRoute("/dashboard/")({
@@ -118,6 +120,9 @@ function DashboardHome() {
   } | null>(null);
   const [zrBalance, setZrBalance] = useState<ZRExpressBalanceResult | null>(null);
   const callZrBalance = useServerFn(getZRExpressBalance);
+  const callZrPending = useServerFn(getPendingZRPayments);
+  const [zrPendingCount, setZrPendingCount] = useState(0);
+  const [zrDialogOpen, setZrDialogOpen] = useState(false);
   const [screenshotLoaded, setScreenshotLoaded] = useState(false);
   const [screenshotError, setScreenshotError] = useState(false);
 
@@ -315,6 +320,37 @@ function DashboardHome() {
       cancelled = true;
     };
   }, [callZrBalance]);
+
+  const loadZrPending = useCallback(async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) return;
+    try {
+      const result = await callZrPending({ data: { accessToken: session.access_token } });
+      setZrPendingCount(result.ok ? result.payments.length : 0);
+    } catch {
+      /* ignore — never block the card */
+    }
+  }, [callZrPending]);
+
+  const refreshZr = useCallback(async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) return;
+    try {
+      const result = await callZrBalance({ data: { accessToken: session.access_token } });
+      setZrBalance(result);
+    } catch {
+      /* ignore */
+    }
+  }, [callZrBalance]);
+
+  useEffect(() => {
+    if (!zrBalance?.ok) return;
+    void loadZrPending();
+  }, [zrBalance, loadZrPending]);
 
   useEffect(() => {
     if (!user) return;
@@ -590,14 +626,33 @@ function DashboardHome() {
               )}
             </div>
           </div>
-          {zrBalance.ok && zrBalance.readyBalance > 0 && (
-            <div className="relative mt-3 flex items-center justify-between">
-              <span className="text-xs text-emerald-600/80 font-medium">Ready to withdraw</span>
-              <Button variant="outline" size="sm" asChild className="h-7 text-xs border-emerald-500/20 hover:bg-emerald-500/10">
-                <Link to="/dashboard/shipments">
-                  Withdraw <ArrowRight className="h-3 w-3 ml-1" />
-                </Link>
-              </Button>
+          {zrBalance.ok && (zrBalance.readyBalance > 0 || zrPendingCount > 0) && (
+            <div className="relative mt-3 flex flex-wrap items-center justify-between gap-2">
+              {zrBalance.readyBalance > 0 && (
+                <span className="text-xs text-emerald-600/80 font-medium">Ready to withdraw</span>
+              )}
+              <div className="ms-auto flex items-center gap-2">
+                {zrPendingCount > 0 && (
+                  <Button
+                    size="sm"
+                    onClick={() => setZrDialogOpen(true)}
+                    className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    <CheckCircle2 className="h-3 w-3 me-1" />
+                    {t("dashboard.zr.confirmButton")}
+                    <span className="ms-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-white/20 px-1 text-[10px] font-bold tabular-nums">
+                      {zrPendingCount}
+                    </span>
+                  </Button>
+                )}
+                {zrBalance.readyBalance > 0 && (
+                  <Button variant="outline" size="sm" asChild className="h-7 text-xs border-emerald-500/20 hover:bg-emerald-500/10">
+                    <Link to="/dashboard/shipments">
+                      Withdraw <ArrowRight className="h-3 w-3 ml-1" />
+                    </Link>
+                  </Button>
+                )}
+              </div>
             </div>
           )}
           {!zrBalance.ok && (
@@ -932,6 +987,12 @@ function DashboardHome() {
       </motion.div>
 
       <InstalledAppsSection />
+
+      <ZRConfirmPaymentDialog
+        open={zrDialogOpen}
+        onOpenChange={setZrDialogOpen}
+        onConfirmed={refreshZr}
+      />
     </div>
   );
 }

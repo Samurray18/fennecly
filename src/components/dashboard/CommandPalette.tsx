@@ -24,6 +24,7 @@ import {
   Wand2,
   Bell,
   Trophy,
+  QrCode,
 } from "lucide-react";
 import {
   Dialog,
@@ -96,16 +97,30 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     if (!open) setQuery("");
   }, [open]);
 
+  const items = useMemo<NavItem[]>(
+    () => [
+      ...NAV_ITEMS,
+      {
+        label: t("dashboard.qr.nav"),
+        to: "/dashboard/qr-code",
+        icon: QrCode,
+        keywords: "qr code barcode generator link whatsapp wifi print",
+        section: "Tools",
+      },
+    ],
+    [t],
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return NAV_ITEMS;
-    return NAV_ITEMS.filter(
+    if (!q) return items;
+    return items.filter(
       (item) =>
         item.label.toLowerCase().includes(q) ||
         item.keywords.toLowerCase().includes(q) ||
         item.section.toLowerCase().includes(q),
     );
-  }, [query]);
+  }, [query, items]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, NavItem[]>();

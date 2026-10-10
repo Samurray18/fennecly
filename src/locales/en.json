@@ -692,6 +692,30 @@
       "eyebrow": "AI Generator",
       "title": "AI Landing Page Generator",
       "description": "Upload a product image and get a complete Arabic landing page in seconds."
+    },
+    "zr": {
+      "confirmButton": "Confirm payment",
+      "dialogTitle": "ZRExpress payments to confirm",
+      "dialogDescription": "Review supplier payments waiting for your confirmation.",
+      "empty": "No payments waiting for confirmation",
+      "retry": "Retry",
+      "errorTitle": "Could not load payments",
+      "sessionExpired": "Your session expired. Please sign in again.",
+      "confirm": "Confirm",
+      "alertTitle": "Confirm payment",
+      "alertBody": "Confirm payment {{referenceId}} of {{amount}} DA? This cannot be undone.",
+      "cancel": "Cancel",
+      "confirmAction": "Confirm",
+      "successToast": "Payment confirmed.",
+      "errorToast": "Could not confirm the payment."
+    },
+    "qr": {
+      "nav": "QR Code",
+      "title": "QR Code Generator",
+      "description": "Create scannable codes for your store link, WhatsApp, Wi-Fi and more — export as PNG or SVG.",
+      "presetsTitle": "Quick fill from your store",
+      "presetStore": "My store link",
+      "presetWhatsapp": "WhatsApp order button"
     }
   },
   "common": {
@@ -1148,6 +1172,7 @@
         "title": "Selling online in Algeria? Create your free Fennecly store",
         "body": "Manage products, orders, delivery and payments from one dashboard — built for Algerian sellers, in French, Arabic and English.",
         "button": "Create your free store",
+        "dashboardButton": "Open the generator in your dashboard",
         "secondary": "Already have an account? Sign in"
       },
       "faq": {

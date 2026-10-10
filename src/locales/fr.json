@@ -692,6 +692,30 @@
       "eyebrow": "Générateur IA",
       "title": "Générateur de pages d'atterrissage IA",
       "description": "Téléversez l'image d'un produit et obtenez une page d'atterrissage complète en arabe en quelques secondes."
+    },
+    "zr": {
+      "confirmButton": "Confirmer le paiement",
+      "dialogTitle": "Paiements ZRExpress à confirmer",
+      "dialogDescription": "Vérifiez les paiements fournisseur en attente de votre confirmation.",
+      "empty": "Aucun paiement en attente de confirmation",
+      "retry": "Réessayer",
+      "errorTitle": "Impossible de charger les paiements",
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+      "confirm": "Confirmer",
+      "alertTitle": "Confirmer le paiement",
+      "alertBody": "Confirmer le paiement {{referenceId}} de {{amount}} DA ? Cette action est irréversible.",
+      "cancel": "Annuler",
+      "confirmAction": "Confirmer",
+      "successToast": "Paiement confirmé.",
+      "errorToast": "Impossible de confirmer le paiement."
+    },
+    "qr": {
+      "nav": "QR Code",
+      "title": "Générateur de QR code",
+      "description": "Créez des codes scannables pour le lien de votre boutique, WhatsApp, Wi-Fi et plus — exportez en PNG ou SVG.",
+      "presetsTitle": "Remplissage rapide depuis votre boutique",
+      "presetStore": "Lien de ma boutique",
+      "presetWhatsapp": "Bouton de commande WhatsApp"
     }
   },
   "common": {
@@ -1148,6 +1172,7 @@
         "title": "Vous vendez en ligne en Algérie ? Créez votre boutique Fennecly gratuite",
         "body": "Gérez produits, commandes, livraison et paiements depuis un seul tableau de bord — pensé pour les vendeurs algériens, en français, arabe et anglais.",
         "button": "Créer ma boutique gratuite",
+        "dashboardButton": "Ouvrir le générateur dans mon tableau de bord",
         "secondary": "Vous avez déjà un compte ? Connectez-vous"
       },
       "faq": {

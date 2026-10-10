@@ -22,6 +22,7 @@ import {
   PackageOpen,
   Wallet,
   Trophy,
+  QrCode,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { FennecyLogo } from "@/components/ui/fennecy-logo";
@@ -128,6 +129,12 @@ export function DashboardSidebar() {
           external: true,
           gradient: "from-teal-500 to-emerald-500",
           tourId: "customize",
+        },
+        {
+          title: t("dashboard.qr.nav"),
+          url: "/dashboard/qr-code",
+          icon: QrCode,
+          gradient: "from-fuchsia-500 to-purple-500",
         },
       ],
     },

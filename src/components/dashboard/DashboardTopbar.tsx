@@ -164,6 +164,11 @@ export function DashboardTopbar({ name, avatarUrl }: { name: string; avatarUrl?:
         keywords: "voice ai audio tts",
       },
       {
+        label: t("dashboard.qr.nav"),
+        to: "/dashboard/qr-code",
+        keywords: "qr code barcode generator link whatsapp wifi print",
+      },
+      {
         label: "Email Marketing",
         to: "/dashboard/apps/email-marketing",
         keywords: "email marketing campaigns",

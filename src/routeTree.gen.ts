@@ -37,6 +37,7 @@ import { Route as DashboardShipmentsRouteImport } from './routes/dashboard.shipm
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardReturnsRouteImport } from './routes/dashboard.returns'
 import { Route as DashboardReferralsRouteImport } from './routes/dashboard.referrals'
+import { Route as DashboardQrCodeRouteImport } from './routes/dashboard.qr-code'
 import { Route as DashboardProgressRouteImport } from './routes/dashboard.progress'
 import { Route as DashboardProductsRouteImport } from './routes/dashboard.products'
 import { Route as DashboardOrdersRouteImport } from './routes/dashboard.orders'
@@ -243,6 +244,11 @@ const DashboardReturnsRoute = DashboardReturnsRouteImport.update({
 const DashboardReferralsRoute = DashboardReferralsRouteImport.update({
   id: '/referrals',
   path: '/referrals',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardQrCodeRoute = DashboardQrCodeRouteImport.update({
+  id: '/qr-code',
+  path: '/qr-code',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardProgressRoute = DashboardProgressRouteImport.update({
@@ -638,6 +644,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/progress': typeof DashboardProgressRoute
+  '/dashboard/qr-code': typeof DashboardQrCodeRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
   '/dashboard/returns': typeof DashboardReturnsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
@@ -732,6 +739,7 @@ export interface FileRoutesByTo {
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/progress': typeof DashboardProgressRoute
+  '/dashboard/qr-code': typeof DashboardQrCodeRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
   '/dashboard/returns': typeof DashboardReturnsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
@@ -830,6 +838,7 @@ export interface FileRoutesById {
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/products': typeof DashboardProductsRoute
   '/dashboard/progress': typeof DashboardProgressRoute
+  '/dashboard/qr-code': typeof DashboardQrCodeRoute
   '/dashboard/referrals': typeof DashboardReferralsRoute
   '/dashboard/returns': typeof DashboardReturnsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
@@ -929,6 +938,7 @@ export interface FileRouteTypes {
     | '/dashboard/orders'
     | '/dashboard/products'
     | '/dashboard/progress'
+    | '/dashboard/qr-code'
     | '/dashboard/referrals'
     | '/dashboard/returns'
     | '/dashboard/settings'
@@ -1023,6 +1033,7 @@ export interface FileRouteTypes {
     | '/dashboard/orders'
     | '/dashboard/products'
     | '/dashboard/progress'
+    | '/dashboard/qr-code'
     | '/dashboard/referrals'
     | '/dashboard/returns'
     | '/dashboard/settings'
@@ -1120,6 +1131,7 @@ export interface FileRouteTypes {
     | '/dashboard/orders'
     | '/dashboard/products'
     | '/dashboard/progress'
+    | '/dashboard/qr-code'
     | '/dashboard/referrals'
     | '/dashboard/returns'
     | '/dashboard/settings'
@@ -1425,6 +1437,13 @@ declare module '@tanstack/react-router' {
       path: '/referrals'
       fullPath: '/dashboard/referrals'
       preLoaderRoute: typeof DashboardReferralsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/qr-code': {
+      id: '/dashboard/qr-code'
+      path: '/qr-code'
+      fullPath: '/dashboard/qr-code'
+      preLoaderRoute: typeof DashboardQrCodeRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/progress': {
@@ -1978,6 +1997,7 @@ interface DashboardRouteChildren {
   DashboardOrdersRoute: typeof DashboardOrdersRoute
   DashboardProductsRoute: typeof DashboardProductsRoute
   DashboardProgressRoute: typeof DashboardProgressRoute
+  DashboardQrCodeRoute: typeof DashboardQrCodeRoute
   DashboardReferralsRoute: typeof DashboardReferralsRoute
   DashboardReturnsRoute: typeof DashboardReturnsRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
@@ -2015,6 +2035,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardOrdersRoute: DashboardOrdersRoute,
   DashboardProductsRoute: DashboardProductsRoute,
   DashboardProgressRoute: DashboardProgressRoute,
+  DashboardQrCodeRoute: DashboardQrCodeRoute,
   DashboardReferralsRoute: DashboardReferralsRoute,
   DashboardReturnsRoute: DashboardReturnsRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
